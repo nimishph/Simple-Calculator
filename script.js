@@ -7,38 +7,14 @@ function updateResult() {
     resultScreen.innerText = buffer[0];    
 }
 
-function updateEquation(value) {
-    if (value === "back") {
-        equation = equation.substr(0, equation.length-1);
-    } else if (isNaN(value)) {
-        if (equation.length === 0)
-            equation += "0";
-        switch(value) {
-            case "+":
-                equation += "+";
-                break;
-            case "-":
-                equation += "-";
-                break;
-            case "×":
-                equation += "×";
-                break;
-            case "÷":
-                equation += "÷";
-                break;  
-            case "=":
-                equation += "=";
-                break;
-        }
-    } else {
-        equation += value;
-    }
+function updateEquation() {
     equationScreen.innerText = equation;
 }
 
 function replaceOperator(value) {
     buffer[1] = value;
     equation = equation.substr(0, equation.length-1);
+    equation += buffer[1];
 }
 
 function updateBuffer(value) {
@@ -65,14 +41,18 @@ function updateBuffer(value) {
             buffer[0] = operand1;
             buffer[1] = value;
             buffer[2] = 0;
+            equation += buffer[1];
         }
     } else {
         if (equation.length === 0) {
             buffer[0] = parseInt(value);
+            equation += buffer[0];
         } else {
             buffer[2] = operand2*10 + parseInt(value);
+            equation += buffer[2];
         }
     }
+    updateEquation();
     updateResult();
 }
 
@@ -93,7 +73,8 @@ function handleBackspace() {
             if (!isNaN(equation.charAt(equation.length))) {
                 buffer[2] = parseInt(buffer[2]/10);
             }
-            updateEquation("back");
+            equation = equation.substr(0, equation.length-1);
+            updateEquation();
 
     }
 }
@@ -114,8 +95,16 @@ function handleSymbolClick(value) {
         case "-":
         case "×":
         case "÷":
-        case "=":
+            if (equation.length === 0)
+                equation += "0";
             updateBuffer(value);
+            updateEquation();
+            break;
+        case "=":
+            if (equation.length > 1) {
+                updateBuffer(value);
+                updateEquation();    
+            }
             break;
     }
 }
@@ -132,7 +121,6 @@ function handleButtonClick(value) {
     } else {
         handelNumberClick(value);
     }
-    updateEquation(value);
 }
 
 function init() {
