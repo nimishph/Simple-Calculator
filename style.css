@@ -7,6 +7,12 @@ body {
     padding: 0;
 }
 
+.heading {
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-style: italic;
+    margin-left: 10px;
+}
+
 .calculator {
     width: 400px;
     background-color: black;
